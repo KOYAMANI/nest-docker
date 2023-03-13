@@ -35,64 +35,64 @@ SHELL [ "/bin/zsh", "-c" ]
 
 WORKDIR /app
 
-COPY --from=development /app/node_modules ./node_modules
+COPY --from=builder /app/node_modules ./node_modules
 
 CMD ["npm", "run", "start:dev"]
 
 ### TARGET: pre-production ###
-FROM $NODE_IMAGE as pre-production
+# FROM $NODE_IMAGE as pre-production
 
-RUN \
-  apt-get update && \
-  apt-get install --yes zsh && \
-  apt-get clean
+# RUN \
+#   apt-get update && \
+#   apt-get install --yes zsh && \
+#   apt-get clean
 
-SHELL [ "/bin/zsh", "-c" ]
+# SHELL [ "/bin/zsh", "-c" ]
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY . .
-COPY --from=builder /app/package*.json ./app/
-COPY --from=builder /app/node_modules ./node_modules
+# COPY . .
+# COPY --from=builder /app/package*.json ./app/
+# COPY --from=builder /app/node_modules ./node_modules
 
-ENV NODE_ENV=development
-ENV ENV=development
+# ENV NODE_ENV=development
+# ENV ENV=development
 
-RUN \
-  apt-get update && \
-  apt-get install --yes build-essential make gcc g++ python3 python3-pip curl && \
-  apt-get clean
+# RUN \
+#   apt-get update && \
+#   apt-get install --yes build-essential make gcc g++ python3 python3-pip curl && \
+#   apt-get clean
 
-RUN \
-  npm version && \
-  npm run build && \
-  npm cache clean --force
+# RUN \
+#   npm version && \
+#   npm run build && \
+#   npm cache clean --force
 
-### TARGET: production ###
-FROM $NODE_IMAGE as production
+# ### TARGET: production ###
+# FROM $NODE_IMAGE as production
 
-RUN \
-  apt-get update && \
-  apt-get install --yes build-essential make gcc g++ python3 python3-pip zsh curl && \
-  apt-get clean
+# RUN \
+#   apt-get update && \
+#   apt-get install --yes build-essential make gcc g++ python3 python3-pip zsh curl && \
+#   apt-get clean
 
-SHELL [ "/bin/zsh", "-c" ]
+# SHELL [ "/bin/zsh", "-c" ]
 
-WORKDIR /app
+# WORKDIR /app
 
-COPY . .
-COPY --from=pre-production /app/package*.json ./app
-COPY --from=pre-production /app/node_modules ./node_modules
-COPY --from=pre-production /app/dist ./dist
+# COPY . .
+# COPY --from=pre-production /app/package*.json ./app
+# COPY --from=pre-production /app/node_modules ./node_modules
+# COPY --from=pre-production /app/dist ./dist
 
-RUN apt-get update && \
-  apt-get install --yes build-essential make gcc g++ python3 python3-pip curl && \
-  apt-get clean
-RUN \
-  npm version && \
-  npm install && \
-  npm ci --omit=dev && \
-  npm cache clean --force
+# RUN apt-get update && \
+#   apt-get install --yes build-essential make gcc g++ python3 python3-pip curl && \
+#   apt-get clean
+# RUN \
+#   npm version && \
+#   npm install && \
+#   npm ci --omit=dev && \
+#   npm cache clean --force
   
-# ENTRYPOINT ["tail", "-f", "/dev/null"]
+# # ENTRYPOINT ["tail", "-f", "/dev/null"]
 

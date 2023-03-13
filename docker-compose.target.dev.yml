@@ -7,7 +7,6 @@ services:
       context: .
       dockerfile: Dockerfile
       target: development
-    platform: linux/amd64
     ports:
       - "5000:5000"
     volumes:
