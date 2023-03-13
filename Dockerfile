@@ -35,7 +35,7 @@ SHELL [ "/bin/zsh", "-c" ]
 
 WORKDIR /app
 
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=development /app/node_modules ./node_modules
 
 CMD ["npm", "run", "start:dev"]
 
