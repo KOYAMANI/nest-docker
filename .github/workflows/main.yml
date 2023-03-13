@@ -28,7 +28,7 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: nest-docker/nest-docker:latest
+          tags: KOYAMANI/nest-docker/nest-docker:latest
 
       # - name: Build image
       #   run: docker build -t nest-docker -f ./Dockerfile
